@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!--
+* Backstrap - Free Bootstrap Admin Template
+* https://backstrap.net
+-->
+<html lang="id">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Data Absensi Karyawan — Admin Panel</title>
+    <!-- Icons -->
+    <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css" rel="stylesheet">
+    <!-- Backstrap main style -->
+    <link href="style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+      /* Badge gender */
+      .badge-laki   { background-color: #20a8d8; color: #fff; }
+      .badge-perempuan { background-color: #f86c6b; color: #fff; }
+      /* Sort icon on th */
+      th[data-col] { cursor: pointer; }
+      th[data-col]:hover { background-color: #f0f3f5; }
+      th[data-col] .sort-icon { font-size: 11px; color: #aaa; margin-left: 4px; }
+      th.sort-asc  .sort-icon::before { content: "▲"; }
+      th.sort-desc .sort-icon::before { content: "▼"; }
+      th .sort-icon::before { content: "⇅"; }
+      /* Toast */
+      .toast-fixed { position: fixed; bottom: 20px; right: 20px; z-index: 9999; min-width: 280px; }
+      /* Empty state */
+      .empty-state { text-align: center; padding: 40px 20px; color: #73818f; }
+      .empty-state i { font-size: 48px; display: block; margin-bottom: 10px; }
+      /* Durasi kecil */
+      .text-durasi { font-size: 11px; color: #aaa; }
+
+      th.col-alamat { width: 200px; max-width: 200px; }
+
+      .app-body { min-height: 100vh; }
+
+      .table thead th { font-size: 12px; }
+
+      #tableBody td strong { font-weight: 500; }
+
+      .navbar-toggler { display: none !important; }
+
+      .sidebar {
+        position: relative !important;
+        top: auto !important;
+        height: auto !important;
+        min-height: unset !important;
+      }
+      .app-body {
+        overflow: visible !important;
+      }
+
+      .navbar-page-title {
+        font-family: 'Nunito', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: #2f353a;
+        margin-left: 260px;
+        white-space: nowrap;
+        letter-spacing: 0.3px;
+      }
+
+      #tableBody .btn-sm {
+        font-size: 11px;
+        padding: 2px 7px;
+      }
+
+      .main {
+        margin-left: 0 !important;
+        padding-left: 15px !important;
+      }
+      .breadcrumb {
+        margin-left: 0 !important;
+        padding-left: 15px !important;
+      }
+    </style>
+  </head>
+
+  <body class="app sidebar-show sidebar-fixed">
+
+<!-- ═══ Navbar Header ═══ -->
+<header class="app-header navbar">
+  <a class="navbar-brand" href="index.html">
+    <b>Absensi</b><span>Pro</span>
+  </a>
+  <ul class="nav navbar-nav ml-auto mr-3">
+    <li class="nav-item d-md-down-none">
+      <span class="nav-link"><i class="fa fa-calendar-o"></i> <span id="tanggalHariIni"></span></span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">0</span></a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button">
+        <i class="fa fa-user-circle fa-2x" style="color:#000"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-header"><strong>Administrator</strong></div>
+        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profil</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</header>
+
+    <div class="app-body">
+
+      <!-- ═══ Sidebar ═══ -->
+       <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-title">Menu Utama</li>
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">
+                <i class="nav-icon la la-lg la-dashboard"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tambah.html">
+                <i class="nav-icon la la-lg la-plus-circle"></i> Input Absensi
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="nav-icon la la-lg la-cog"></i> Pengaturan
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <!-- /.sidebar -->
+
+      <!-- ═══ Main Content ═══ -->
+      <main class="main">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Data Absensi</li>
+        </ol>
+
+        <div class="container-fluid">
+
+          <!-- Page Title -->
+          <div class="animated fadeIn">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0"> Data Absensi Karyawan</h4>
+              <a href="tambah.html" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Input Absensi
+              </a>
+            </div>
+
+            <!-- ── Stat Cards ── -->
+            <div class="row">
+              <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-primary">
+                  <div class="card-body d-flex align-items-center">
+                    <i class="fa fa-users fa-3x mr-3" style="opacity:.5"></i>
+                    <div>
+                      <div class="text-value" id="statTotal">0</div>
+                      <div>Total Absensi</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-success">
+                  <div class="card-body d-flex align-items-center">
+                    <i class="fa fa-check-circle fa-3x mr-3" style="opacity:.5"></i>
+                    <div>
+                      <div class="text-value" id="statHariIni">0</div>
+                      <div>Hadir Hari Ini</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-info">
+                  <div class="card-body d-flex align-items-center">
+                    <i class="fa fa-male fa-3x mr-3" style="opacity:.5"></i>
+                    <div>
+                      <div class="text-value" id="statLK">0</div>
+                      <div>Laki-laki</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-warning">
+                  <div class="card-body d-flex align-items-center">
+                    <i class="fa fa-female fa-3x mr-3" style="opacity:.5"></i>
+                    <div>
+                      <div class="text-value" id="statPR">0</div>
+                      <div>Perempuan</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.row stat cards -->
+
+            <!-- ── Tabel Absensi ── -->
+            <div class="card">
+              <div class="card-header d-flex flex-wrap align-items-center justify-content-between" style="gap:8px">
+                <div>
+                  <strong><i class="fa fa-table"></i> Daftar Absensi</strong>
+                  <small class="text-muted d-block">Klik header kolom untuk mengurutkan</small>
+                </div>
+                <!-- Toolbar Filter -->
+                <div class="d-flex flex-wrap" style="gap:6px">
+                  <div class="input-group input-group-sm" style="width:200px">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Cari nama / alamat...">
+                  </div>
+                  <input type="date" id="filterTanggal" class="form-control form-control-sm" style="width:150px" title="Filter tanggal">
+                  <select id="filterJK" class="form-control form-control-sm" style="width:160px">
+                    <option value="" selected hidden>Semua Jenis Kelamin</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                  </select>
+                  <select id="perPage" class="form-control form-control-sm" style="width:120px">
+                    <option value="5">5 / halaman</option>
+                    <option value="10">10 / halaman</option>
+                    <option value="20">20 / halaman</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover table-bordered table-sm mb-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th class="text-center" style="width:45px">#</th>
+                        <th class="text-center" data-col="nama">Nama Karyawan <span class="sort-icon"></span></th>
+                        <th class="text-center" data-col="alamat" class="col-alamat">Alamat <span class="sort-icon"></span></th>
+                        <th class="text-center" data-col="jenisKelamin">Jenis Kelamin <span class="sort-icon"></span></th>
+                        <th class="text-center" data-col="tanggalAbsen">Tanggal Absen <span class="sort-icon"></span></th>
+                        <th class="text-center" data-col="jamMasuk">Jam Masuk <span class="sort-icon"></span></th>
+                        <th class="text-center" data-col="jamKeluar">Jam Keluar <span class="sort-icon"></span></th>
+                        <th class="text-center" style="width:150px">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                      <!-- Rendered by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Pagination Footer -->
+              <div class="card-footer d-flex align-items-center justify-content-between flex-wrap" style="gap:8px">
+                <small class="text-muted" id="pageInfo"></small>
+                <ul class="pagination pagination-sm mb-0" id="pagination"></ul>
+              </div>
+            </div>
+            <!-- /.card tabel -->
+
+          </div>
+          <!-- /.animated -->
+        </div>
+        <!-- /.container-fluid -->
+      </main>
+
+    </div>
+    <!-- /.app-body -->
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="app-footer">
+      <div><a href="https://backstrap.net">BackStrap</a> &copy; 2019</div>
+      <div class="ml-auto">Admin Absensi Karyawan</div>
+    </footer>
+
+    <!-- ═══ Modal Edit ═══ -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fa fa-pencil"></i> Edit Data Absensi</h5>
+            <button type="button" class="close" data-dismiss="modal" style="border:none;background:none"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Nama Karyawan <span class="text-danger">*</span></label>
+                  <input type="text" id="editNama" class="form-control" placeholder="Nama lengkap">
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Alamat <span class="text-danger">*</span></label>
+                  <textarea id="editAlamat" class="form-control" rows="2" placeholder="Alamat lengkap"></textarea>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Jenis Kelamin <span class="text-danger">*</span></label>
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="editJK" id="editJKL" value="Laki-laki">
+                      <label class="form-check-label" for="editJKL">Laki-laki</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="editJK" id="editJKP" value="Perempuan">
+                      <label class="form-check-label" for="editJKP">Perempuan</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>Tanggal Absen <span class="text-danger">*</span></label>
+                  <input type="date" id="editTanggal" class="form-control">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>Jam Masuk <span class="text-danger">*</span></label>
+                  <input type="time" id="editJamMasuk" class="form-control">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>Jam Keluar <span class="text-danger">*</span></label>
+                  <input type="time" id="editJamKeluar" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-primary" onclick="doEdit()">
+              <i class="fa fa-check"></i> Simpan Perubahan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Modal Hapus ═══ -->
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius:12px;overflow:hidden">
+          <div class="modal-header bg-white">
+            <h5 class="modal-title" style="color:#000">Konfirmasi Hapus</h5>
+            <button type="button" data-dismiss="modal" style="border:none;background:none;font-size:20px">&times;</button>
+          </div>
+          <div class="modal-body text-center py-4">
+            <p class="mb-1 text-muted">Hapus data absensi atas nama</p>
+            <strong id="deleteName" class="d-block" style="font-size:18px"></strong>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-danger" onclick="doDelete()">Ya, Hapus</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position:fixed;bottom:20px;right:20px;z-index:9999;min-width:280px"></div>
+
+    <!-- Scripts -->
+    <script src="vendors/jquery/js/jquery.min.js"></script>
+    <script src="vendors/popper.js/js/popper.min.js"></script>
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/pace-progress/js/pace.min.js"></script>
+    <script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="app.js"></script>
+    <script>
+      // Tanggal header
+      const now = new Date();
+      document.getElementById("tanggalHariIni").textContent =
+        now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+      // Bootstrap 4 modal wrappers
+      function openModal(id)  { $('#' + id).modal('show'); }
+      function closeModal(id) { $('#' + id).modal('hide'); }
+    </script>
+  </body>
+</html>

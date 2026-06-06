@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!--
+* Backstrap - Free Bootstrap Admin Template
+* https://backstrap.net
+-->
+<html lang="id">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Input Absensi — Admin Panel</title>
+    <!-- Icons -->
+    <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css" rel="stylesheet">
+    <!-- Backstrap main style -->
+    <link href="style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+      .section-divider {
+        font-size: 12px; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 1px; color: #20a8d8;
+        border-bottom: 2px solid #20a8d8;
+        padding-bottom: 6px; margin-bottom: 16px;
+      }
+      /* Toast */
+      #toastContainer .alert { border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+
+      .navbar-toggler { display: none !important; }
+
+      .sidebar {
+        position: relative !important;
+        top: auto !important;
+        height: auto !important;
+        min-height: unset !important;
+      }
+      .app-body {
+        overflow: visible !important;
+      }
+
+      .navbar-page-title {
+        font-family: 'Nunito', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: #2f353a;
+        margin-left: 260px;
+        white-space: nowrap;
+        letter-spacing: 0.3px;
+      }
+
+      .main {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+      }
+      .breadcrumb {
+        margin-left: 0 !important;
+        padding-left: 15px !important;
+      }
+    </style>
+  </head>
+
+  <body class="app sidebar-show sidebar-fixed">
+
+    <!-- ═══ Navbar Header ═══ -->
+    <header class="app-header navbar">
+      <a class="navbar-brand" href="index.html">
+        <b>Absensi</b><span>Pro</span>
+      </a>
+      <ul class="nav navbar-nav ml-auto mr-3">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="icon-bell"></i>
+            <span class="badge badge-pill badge-danger">0</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" role="button">
+            <i class="fa fa-user-circle fa-2x" style="color:#000"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-header"><strong>Administrator</strong></div>
+            <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profil</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+
+    <div class="app-body">
+
+      <!-- ═══ Sidebar ═══ -->
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-title">Menu Utama</li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="nav-icon la la-lg la-dashboard"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="tambah.html">
+                <i class="nav-icon la la-lg la-plus-circle"></i> Input Absensi
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="nav-icon la la-lg la-cog"></i> Pengaturan
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <!-- /.sidebar -->
+
+      <!-- ═══ Main Content ═══ -->
+      <main class="main">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Data Absensi</a></li>
+          <li class="breadcrumb-item active">Input Absensi Baru</li>
+        </ol>
+
+        <div class="container-fluid">
+          <div class="animated fadeIn">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0"> Input Data Absensi</h4>
+              <a href="index.html" class="btn btn-secondary btn-sm">
+                <i class="fa fa-arrow-left"></i> Kembali ke Daftar
+              </a>
+            </div>
+
+            <div class="row">
+              <div class="col-md-8 offset-md-2">
+                <div class="card">
+                  <div class="card-header">
+                    <strong><i class="fa fa-id-badge"></i> Formulir Absensi Karyawan</strong>
+                  </div>
+                  <div class="card-body">
+                    <form id="formTambah" novalidate>
+
+                      <!-- Data Karyawan -->
+                      <div class="section-divider"> Data Karyawan</div>
+
+                      <div class="form-group">
+                        <label for="nama">Nama Karyawan <span class="text-danger">*</span></label>
+                        <input type="text" id="nama" class="form-control" placeholder="Masukkan nama lengkap">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="alamat">Alamat <span class="text-danger">*</span></label>
+                        <textarea id="alamat" class="form-control" rows="3" placeholder="Masukkan alamat lengkap"></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Jenis Kelamin <span class="text-danger">*</span></label>
+                        <div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisKelamin" id="jkL" value="Laki-laki">
+                            <label class="form-check-label" for="jkL">Laki-laki</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisKelamin" id="jkP" value="Perempuan">
+                            <label class="form-check-label" for="jkP">Perempuan</label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr>
+
+                      <!-- Data Kehadiran -->
+                      <div class="section-divider"> Waktu Kehadiran</div>
+
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label for="tanggal">Tanggal Absen <span class="text-danger">*</span></label>
+                            <input type="date" id="tanggal" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label for="jamMasuk">Jam Masuk <span class="text-danger">*</span></label>
+                            <input type="time" id="jamMasuk" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label for="jamKeluar">Jam Keluar <span class="text-danger">*</span></label>
+                            <input type="time" id="jamKeluar" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr>
+
+                      <!-- Buttons -->
+                      <div class="d-flex justify-content-end" style="gap:8px">
+                        <a href="index.html" class="btn btn-secondary">
+                          <i class="fa fa-times"></i> Batal
+                        </a>
+                        <button type="reset" class="btn btn-warning">
+                          <i class="fa fa-refresh"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          <i class="fa fa-save"></i> Simpan Absensi
+                        </button>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+    </div>
+    <!-- /.app-body -->
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div><a href="https://backstrap.net">BackStrap</a> &copy; 2019</div>
+      <div class="ml-auto">Admin Absensi Karyawan</div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position:fixed;bottom:20px;right:20px;z-index:9999;min-width:280px"></div>
+
+    <!-- Scripts -->
+    <script src="vendors/jquery/js/jquery.min.js"></script>
+    <script src="vendors/popper.js/js/popper.min.js"></script>
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/pace-progress/js/pace.min.js"></script>
+    <script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="app.js"></script>
+    <script>
+      function openModal(id)  { $('#' + id).modal('show'); }
+      function closeModal(id) { $('#' + id).modal('hide'); }
+    </script>
+  </body>
+</html>
